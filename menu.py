@@ -30,18 +30,39 @@ class NumsColumn:
 
 class Start:
     def __init__(self):
-        while True:
+        self.play = True
+        self.timer = 0
+        self.select = 0
+        while self.play:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.play = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_UP:
+                        self.select -= 1
+                    elif event.key == pg.K_DOWN:
+                        self.select += 1
+                    elif event.key in (pg.K_SPACE, pg.K_RETURN):
+                        if items[self.select] == 'Exit':
+                            self.play = False
+                    self.select = self.select % len(items)
+            self.timer += 1
             screen.blit(surface, (0, 0))
             surface.fill(pg.Color('black'))
             [num_column.draw() for num_column in nums_columns]
-            [exit() for i in pg.event.get() if i.type == pg.QUIT]
+            for i in range(len(items)):
+                if i == self.select and self.timer % 30 < 15:
+                    text = fontItemSelect.render(items[i], 0, 'white')
+                else:
+                    text = fontItem.render(items[i], 0, 'gray')
+                rect = text.get_rect(center=(WIDTH // 2, 400 + 70 * i))
+                screen.blit(text, rect)
             pg.display.flip()
             clock.tick(60)
 
 
 WIDTH, HEIGHT = 1600, 900
 FONT_SIZE = 40
-
 pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
 surface = pg.Surface((WIDTH, HEIGHT))
@@ -50,4 +71,7 @@ nums = "0123456789"
 font = pg.font.Font('northrup-regular.ttf', FONT_SIZE)
 green_nums = [font.render(char, True, (40, randrange(160, 256), 40)) for char in nums]
 nums_columns = [NumsColumn(x, randrange(-HEIGHT, 0)) for x in range(0, WIDTH, FONT_SIZE)]
+fontItem = pg.font.Font('better-vcr_0.ttf', 50)
+fontItemSelect = pg.font.Font('better-vcr_0.ttf', 60)
+items = ['Start', 'Exit']
 st = Start()
