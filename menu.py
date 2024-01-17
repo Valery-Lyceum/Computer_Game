@@ -30,6 +30,8 @@ class NumsColumn:
 
 class Start:
     def __init__(self):
+        pg.mixer.music.load('sounds/xpSong.mp3')
+        pg.mixer.music.play()
         self.play = True
         self.timer = 0
         self.select = 0
@@ -37,6 +39,7 @@ class Start:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.play = False
+                    pg.mixer.music.stop()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_UP:
                         self.select -= 1
@@ -45,6 +48,7 @@ class Start:
                     elif event.key in (pg.K_SPACE, pg.K_RETURN):
                         if items[self.select] == 'Exit':
                             self.play = False
+                            pg.mixer.music.stop()
                     self.select = self.select % len(items)
             self.timer += 1
             screen.blit(surface, (0, 0))
@@ -68,10 +72,10 @@ screen = pg.display.set_mode((WIDTH, HEIGHT))
 surface = pg.Surface((WIDTH, HEIGHT))
 clock = pg.time.Clock()
 nums = "0123456789"
-font = pg.font.Font('northrup-regular.ttf', FONT_SIZE)
+font = pg.font.Font('fonts/northrup-regular.ttf', FONT_SIZE)
 green_nums = [font.render(char, True, (40, randrange(160, 256), 40)) for char in nums]
 nums_columns = [NumsColumn(x, randrange(-HEIGHT, 0)) for x in range(0, WIDTH, FONT_SIZE)]
-fontItem = pg.font.Font('better-vcr_0.ttf', 50)
-fontItemSelect = pg.font.Font('better-vcr_0.ttf', 60)
+fontItem = pg.font.Font('fonts/better-vcr_0.ttf', 50)
+fontItemSelect = pg.font.Font('fonts/better-vcr_0.ttf', 60)
 items = ['Start', 'Exit']
 st = Start()
