@@ -1,6 +1,6 @@
 import pygame as pg
 from random import choice, randrange
-
+from gameplay import GameProcess
 
 class Num:
     def __init__(self, x, y, speed):
@@ -49,6 +49,10 @@ class Start:
                         if items[self.select] == 'Exit':
                             self.play = False
                             pg.mixer.music.stop()
+                        if items[self.select] == 'Start':
+                            self.play = False
+                            pg.mixer.music.stop()
+                            gmprcs = GameProcess()
                     self.select = self.select % len(items)
             self.timer += 1
             screen.blit(surface, (0, 0))
@@ -63,6 +67,7 @@ class Start:
                 screen.blit(text, rect)
             pg.display.flip()
             clock.tick(60)
+
 
 
 WIDTH, HEIGHT = 1600, 900
